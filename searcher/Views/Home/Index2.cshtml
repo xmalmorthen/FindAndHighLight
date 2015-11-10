@@ -1,0 +1,24 @@
+﻿@model searcher.Utils.HTMLTOPDF.Searcher.Respuesta
+@{
+    ViewBag.Title = "Index2";
+}
+<style type="">
+
+</style>
+
+<h2>Index2</h2>
+<div>
+    <ul>
+        @foreach (var item in Model.text)
+	    {
+            <li>@item</li>		 
+	    }        
+    </ul>
+</div>
+<hr />
+@Model.coincidences
+<hr />
+<object data="data:application/pdf;base64,@Convert.ToBase64String(Model.file)"
+        width="100%" height="800" type="application/pdf"></object>
+
+<hr />

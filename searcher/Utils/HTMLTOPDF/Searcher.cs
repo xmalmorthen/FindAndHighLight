@@ -44,11 +44,12 @@ namespace searcher.Utils.HTMLTOPDF
                 {
                     txt = new MyLocationTextExtractionStrategy(text);
                     var ex = PdfTextExtractor.GetTextFromPage(reader, i, txt);
-                    txt.strings.ForEach(item => { if (item.Contains(text)) coincidences++; });                    
+                    txt.strings.ForEach(item => { if (item.Contains(text)) { coincidences++; cadenas.Add(item);  } });                    
                     //coincidences = txt.myPoints.Count();
                     foreach (var item in txt.myPoints)
                     {
-
+                        if (!item.Text.Contains(text))
+                            continue;
                         //Create a rectangle for the highlight. NOTE: Technically this isn't used but it helps with the quadpoint calculation
                         iTextSharp.text.Rectangle rect = new iTextSharp.text.Rectangle(item.Rect);
                         //Create an array of quad points based on that rectangle. NOTE: The order below doesn't appear to match the actual spec but is what Acrobat produces
@@ -154,17 +155,37 @@ namespace searcher.Utils.HTMLTOPDF
 
             return new Respuesta() { coincidences = coincidences, file = outPdfStream.GetBuffer(), text = cadenas }; 
         }
+
+        public string PDFIndex(byte[] pdf)
+        {
+            StringBuilder pdftext = new StringBuilder();
+            Stream inputPdfStream = new MemoryStream(pdf);
+            PdfReader reader = new PdfReader(inputPdfStream);
+            for (int i = 1; i < reader.NumberOfPages + 1; i++)
+            {
+                pdftext.Append(PdfTextExtractor.GetTextFromPage(reader, i).Trim().TrimEnd().TrimStart());
+            }
+            return pdftext.ToString().Trim();
+        }
+
+        public void Search(byte[] pdf)
+        {
+
+        }
     }
 
     public class MyLocationTextExtractionStrategy : LocationTextExtractionStrategy
     {
         public String TextToSearchFor { get; set; }
         bool find = false;
+        Vector startPositionWord, endPositionWord;
+        bool wordended = false;
         //Text buffer
         private StringBuilder result = new StringBuilder();
 
         //Store last used properties
         private Vector lastBaseLine;
+        private Vector lastAscentLine;
 
         //Buffer of lines of text and their Y coordinates. NOTE, these should be exposed as properties instead of fields but are left as is for simplicity's sake
         public List<string> strings = new List<String>();
@@ -206,6 +227,7 @@ namespace searcher.Utils.HTMLTOPDF
 
             //This code assumes that if the baseline changes then we're on a newline
             Vector curBaseline = renderInfo.GetBaseline().GetStartPoint();
+            Vector curBaseline2 = renderInfo.GetAscentLine().GetEndPoint();
 
             //See if the baseline has changed
             if ((this.lastBaseLine != null) && (curBaseline[Vector.I2] != lastBaseLine[Vector.I2]))
@@ -216,16 +238,37 @@ namespace searcher.Utils.HTMLTOPDF
                     //Mark the previous line as done by adding it to our buffers
                     this.baselines.Add(this.lastBaseLine[Vector.I2]);
                     this.strings.Add(this.result.ToString());
+
+                    if (this.result.ToString().Contains(TextToSearchFor))
+                    {
+                        //Create a rectangle from it
+                        var rect = new iTextSharp.text.Rectangle(startPositionWord[Vector.I1],
+                                                            startPositionWord[Vector.I2],
+                                                            lastAscentLine[Vector.I1],
+                                                            lastAscentLine[Vector.I2]);
+
+                        this.myPoints.Add(new RectAndText(rect, this.result.ToString()));
+                        startPositionWord = null;
+                        endPositionWord = null;
+                    }
                 }
                 //Reset our "line" buffer
                 this.result.Clear();
+                wordended = true;
             }
 
             //Append the current text to our line buffer
-            this.result.Append(renderInfo.GetText());
+            if (!string.IsNullOrWhiteSpace(renderInfo.GetText()))
+                this.result.Append(renderInfo.GetText());
 
+            if (!string.IsNullOrWhiteSpace(result.ToString()) && wordended)
+            {
+                wordended = false;
+                startPositionWord = renderInfo.GetDescentLine().GetStartPoint();                
+            }
             //Reset the last used line
             this.lastBaseLine = curBaseline;
+            this.lastAscentLine = curBaseline2;
         }
 
         public class RectAndText

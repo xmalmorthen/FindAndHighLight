@@ -43,15 +43,15 @@ namespace searcher.Utils.HTMLTOPDF
 
         public Rectanngulo findInLine(String renglon, string texto,  iTextSharp.text.Rectangle rect)
         {
-            int longitud= renglon.Count();
+            int longitud= renglon.Trim().Count();
             int longitudtexto = texto.Count();
             int posicion = renglon.IndexOf(texto);
             
             double tamañoCaracter = 0;
-            tamañoCaracter = (rect.Width - rect.Left)/ longitud;
+            tamañoCaracter = rect.Width/ longitud;
             
             double inicio = rect.Left + (tamañoCaracter * posicion);
-            double fin = rect.Width - (tamañoCaracter * (longitud - longitudtexto));
+            double fin = longitudtexto * tamañoCaracter; //rect.Right - (tamañoCaracter * (longitud - longitudtexto));
                         
             return new Rectanngulo { height = rect.Height, bottom = rect.Bottom, left = inicio, width= fin };
         }
@@ -290,7 +290,7 @@ namespace searcher.Utils.HTMLTOPDF
             }
 
             //Append the current text to our line buffer
-            if (!string.IsNullOrWhiteSpace(renderInfo.GetText()))
+            //if (!string.IsNullOrWhiteSpace(renderInfo.GetText()))
                 this.result.Append(renderInfo.GetText());
 
             if (!string.IsNullOrWhiteSpace(result.ToString()) && wordended)

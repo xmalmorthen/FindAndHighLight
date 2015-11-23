@@ -35,5 +35,10 @@ namespace searcher.Controllers
             return View();
         }
 
+        public ActionResult PDFTOHTML(string text)
+        {
+            return View();
+        }
+
     }
 }

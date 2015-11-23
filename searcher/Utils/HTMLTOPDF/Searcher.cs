@@ -25,6 +25,37 @@ namespace searcher.Utils.HTMLTOPDF
                 this.file = new byte[0];
             }
         }
+
+        public class Rectanngulo{
+            public Double left;
+            public Double height;
+            public Double width;
+            public Double bottom;
+
+            public Rectanngulo()
+            {
+                this.left = 0;
+                this.height = 0;
+                this.width = 0;
+                this.bottom = 0;
+            }
+        }
+
+        public Rectanngulo findInLine(String renglon, string texto,  iTextSharp.text.Rectangle rect)
+        {
+            int longitud= renglon.Count();
+            int longitudtexto = texto.Count();
+            int posicion = renglon.IndexOf(texto);
+            
+            double tamañoCaracter = 0;
+            tamañoCaracter = (rect.Width - rect.Left)/ longitud;
+            
+            double inicio = rect.Left + (tamañoCaracter * posicion);
+            double fin = rect.Left - (tamañoCaracter * longitudtexto);// rect.Width - (tamañoCaracter * (longitud - longitudtexto));
+                        
+            return new Rectanngulo { height = rect.Height, bottom = rect.Bottom, left = inicio, width= fin };
+        }
+       
         public Respuesta find(byte[] pdf, string text)
         {
             int coincidences = 0;
@@ -73,8 +104,9 @@ namespace searcher.Utils.HTMLTOPDF
                             PdfGState gs1 = new PdfGState();
                             gs1.FillOpacity = 0.3f;
                             over.SetGState(gs1);
-
-                            over.Rectangle(rect.Left, rect.Bottom, rect.Width, rect.Height);
+                            Rectanngulo rectangulo = findInLine(item.Text, text, rect);
+                            //over.Rectangle(rect.Left, rect.Bottom, rect.Width, rect.Height);
+                            over.Rectangle(rectangulo.left, rectangulo.bottom, rectangulo.width, rectangulo.height);
                             over.SetColorFill(BaseColor.YELLOW);
                             over.Fill();
                             over.SetColorStroke(BaseColor.BLUE);
@@ -545,4 +577,6 @@ namespace searcher.Utils.HTMLTOPDF
 
         }
     }
+
+    
 }

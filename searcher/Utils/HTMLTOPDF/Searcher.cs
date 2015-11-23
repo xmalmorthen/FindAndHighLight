@@ -51,7 +51,7 @@ namespace searcher.Utils.HTMLTOPDF
             tamañoCaracter = (rect.Width - rect.Left)/ longitud;
             
             double inicio = rect.Left + (tamañoCaracter * posicion);
-            double fin = rect.Left - (tamañoCaracter * longitudtexto);// rect.Width - (tamañoCaracter * (longitud - longitudtexto));
+            double fin = rect.Width - (tamañoCaracter * (longitud - longitudtexto));
                         
             return new Rectanngulo { height = rect.Height, bottom = rect.Bottom, left = inicio, width= fin };
         }

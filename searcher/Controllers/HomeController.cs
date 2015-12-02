@@ -35,9 +35,18 @@ namespace searcher.Controllers
             return View();
         }
 
-        public ActionResult PDFTOHTML(string text)
+        public ActionResult viewer(string text)
         {
             return View();
+        }
+
+        public FileContentResult getFile(string type)
+        {
+
+            if(type.Equals("pdf", StringComparison.InvariantCultureIgnoreCase))
+                return new FileContentResult(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), "application/pdf");
+            else
+                return new FileContentResult(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/doc.docx")), "application/octet-stream");
         }
 
     }

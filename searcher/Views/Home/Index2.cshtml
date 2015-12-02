@@ -23,6 +23,16 @@
 @Model.coincidences
 <hr />
 <object data="data:application/pdf;base64,@Convert.ToBase64String(Model.file)"
-        width="100%" height="800" type="application/pdf"></object>
+        width="100%" height="300" type="application/pdf">     
+</object>
 
 <hr />
+
+<iframe src="@Url.Action("getFile", new { type = "pdf" })#toolbar=0&navpanes=0&view=FitH&page=5" width="60%" height="300">
+
+</iframe>
+
+<hr />
+
+<object data="@Url.Action("getFile", new { type = "pdf" })#&view=FitH&page=5" type="application/pdf" width="100%" height="300">   
+</object>

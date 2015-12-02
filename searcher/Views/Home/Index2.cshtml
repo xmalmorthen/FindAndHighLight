@@ -9,10 +9,14 @@
 <h2>Index2</h2>
 <div>
     <ul>
-        @foreach (var item in Model.text)
+   @*     @foreach (var item in Model.text)
 	    {
             <li>@item</li>		 
-	    }        
+	    }        *@
+        @foreach (var item in Model.ubicacion)
+	    {
+            <li data-pag="@item.pagina" data-left="@item.coordenada" >@item.cadenas</li>		 
+	    }    
     </ul>
 </div>
 <hr />

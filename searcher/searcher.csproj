@@ -232,6 +232,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Utils\Libs\HiQ\HiQPdf.dep" />
     <Content Include="Views\Home\Index2.cshtml" />
+    <Content Include="Views\Home\viewer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

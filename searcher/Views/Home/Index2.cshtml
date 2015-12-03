@@ -9,10 +9,6 @@
 
 <nav>
     <ul>
-   @*     @foreach (var item in Model.text)
-	    {
-            <li>@item</li>		 
-	    }        *@
         <li>
             <input type="text" id="buscador" placeholder="Buscar"/>
         </li>
@@ -25,24 +21,36 @@
 	    }    
     </ul>
 </nav>
-<hr />
+<div>
+    <hr />
+    Knockout
+    <iframe data-bind="attr: {src: srcKO}" width="60%" height="300"></iframe>
+    <br />        
+    <button data-bind="click: Change">Move Page </button>
+</div>
 
+@section Scripts{    
+    <script src="~/Scripts/knockout-2.2.0.js"></script>
+    <script>
 
+        var viewModel = {
+            uriKO: ko.observable("@Url.Action("getFile", new { type = "pdf" })"),
+            pageKO: ko.observable(1),
+            pdf_paramasKO: ko.observable("#toolbar=0&navpanes=0&view=FitH&page="),
+            Change: function () {                
+                this.pageKO(this.pageKO()+1);                
+            }
+        };
+        viewModel.srcKO = ko.dependentObservable(function () {
+            return this.uriKO() + this.pdf_paramasKO() + this.pageKO();
+        }, viewModel);
 
+        ko.applyBindings(viewModel);
 
-@Model.coincidences
-<hr />
-<object data="data:application/pdf;base64,@Convert.ToBase64String(Model.file)"
-        width="100%" height="300" type="application/pdf">     
-</object>
-
-<hr />
-
-<iframe src="@Url.Action("getFile", new { type = "pdf" })#toolbar=0&navpanes=0&view=FitH&page=5" width="60%" height="300">
-
-</iframe>
-
-<hr />
-
-<object data="@Url.Action("getFile", new { type = "pdf" })#&view=FitH&page=5" type="application/pdf" width="100%" height="300">   
-</object>
+        $(document).ready(function () {
+            $("#btnMove").on("click", function () {
+                //$("#emarf").attr("src", $("#myiframe").attr("src"));
+            });
+        });
+    </script>
+}

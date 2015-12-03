@@ -25,6 +25,19 @@ namespace searcher.Controllers
             //ViewBag.base64EncodedPdf = Convert.ToBase64String(file);
             return View(resp);
         }
+        [HttpPost]
+        public ActionResult Index2(FormCollection frm)
+        {
+            Searcher s = new Searcher();
+            //new FileStream("", FileMode.);
+            //return Json(s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text, new FileStream(Server.MapPath("~/Files/bienestar2.pdf"), FileMode.Create, FileAccess.Write, FileShare.None)), JsonRequestBehavior.AllowGet);            
+            //return File(s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text), "application/pdf");
+
+            searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), frm["text"]);
+            //byte[] file = resp.file;            
+            //ViewBag.base64EncodedPdf = Convert.ToBase64String(file);
+            return View(resp);
+        }
 
         public ActionResult Index3(string text)
         {

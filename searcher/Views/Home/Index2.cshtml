@@ -6,18 +6,21 @@
 
 </style>
 
-<h2>Index2</h2>
-<div>
+
+<nav>
     <ul>
-        @foreach (var item in Model.text)
+        <li>
+            <input type="text" id="buscador" placeholder="Buscar"/>
+        </li>
+        @foreach (var item in Model.ubicacion)
 	    {
-            <li>@item</li>		 
-	    }        
+            <li data-pag="@item.pagina" data-left="@item.coordenada" >
+                <div class="barra"></div> 
+                <p class="menu"> @item.cadenas </p>
+            </li>		 
+	    }    
     </ul>
-</div>
-<hr />
-@Model.coincidences
-<hr />
+</nav>
 <div>
     <hr />
     Knockout

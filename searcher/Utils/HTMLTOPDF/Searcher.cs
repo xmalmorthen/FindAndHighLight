@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
+using searcher.Models;
 
 namespace searcher.Utils.HTMLTOPDF
 {
@@ -17,6 +18,7 @@ namespace searcher.Utils.HTMLTOPDF
             public byte[] file { get; set; }
             public int coincidences { get; set; }
             public List<String> text { get; set; }
+            public List<WordFine> ubicacion { get; set; }
 
             public Respuesta()
             {
@@ -60,6 +62,7 @@ namespace searcher.Utils.HTMLTOPDF
         {
             int coincidences = 0;
             List<string> cadenas = new List<string>();
+            List<WordFine> renglones = new List<WordFine>();
             if (String.IsNullOrEmpty(text))
                 return new Respuesta();
 
@@ -73,19 +76,25 @@ namespace searcher.Utils.HTMLTOPDF
             {
                 for (int i = 1; i < reader.NumberOfPages + 1; i++)
                 {
+                   
                     txt = new MyLocationTextExtractionStrategy(text);
                     var ex = PdfTextExtractor.GetTextFromPage(reader, i, txt);
-                    txt.strings.ForEach(item => { if (item.Contains(text)) { coincidences++; cadenas.Add(item);  } });                    
+
+                    txt.strings.ForEach(item => { if (item.Contains(text)) { coincidences++; ; cadenas.Add(item);  } });                    
                     //coincidences = txt.myPoints.Count();
                     foreach (var item in txt.myPoints)
                     {
+                        WordFine itemWord = new WordFine();
                         if (!item.Text.Contains(text))
                             continue;
                         //Create a rectangle for the highlight. NOTE: Technically this isn't used but it helps with the quadpoint calculation
                         iTextSharp.text.Rectangle rect = new iTextSharp.text.Rectangle(item.Rect);
                         //Create an array of quad points based on that rectangle. NOTE: The order below doesn't appear to match the actual spec but is what Acrobat produces
                         //float[] quad = { rect.Left, rect.Bottom, rect.Right, rect.Bottom, rect.Left, rect.Top, rect.Right, rect.Top };
-
+                        itemWord.pagina =i;
+                        itemWord.cadenas = item.Text;
+                        itemWord.coordenada = rect.Left;
+                        renglones.Add(itemWord);
                         //Create our hightlight
                         //PdfAnnotation highlight = PdfAnnotation.CreateMarkup(stamper.Writer, rect, null, PdfAnnotation.MARKUP_HIGHLIGHT, quad);
 
@@ -185,7 +194,7 @@ namespace searcher.Utils.HTMLTOPDF
             //    doc.Close();
             //}
 
-            return new Respuesta() { coincidences = coincidences, file = outPdfStream.GetBuffer(), text = cadenas }; 
+            return new Respuesta() { coincidences = coincidences, file = outPdfStream.GetBuffer(), text = cadenas, ubicacion= renglones }; 
         }
 
         public string PDFIndex(byte[] pdf)

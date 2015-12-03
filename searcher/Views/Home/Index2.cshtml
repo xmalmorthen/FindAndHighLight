@@ -2,46 +2,57 @@
 @{
     ViewBag.Title = "Index2";
 }
-<style type="">
 
-</style>
+<div id="contenedor" class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <nav class="row">
+                <ul>
+                    <li>
+                        @using(Html.BeginForm()){
+                            <input type="text" name="text" id="buscador" placeholder="Buscar" />
+                        }      
+                    </li>
+                    @foreach (var item in Model.ubicacion)
+                    {
+                        <li data-bind="click: Change" data-pag="@item.pagina" data-left="@item.coordenada" >
+                            <div class="barra"></div>
+                            <p class="menu">@item.cadenas </p>
+                        </li>		 
+                    }
+                </ul>
+            </nav>
+        </div>
 
-
-<nav>
-    <ul>
-        <li>
-            <input type="text" id="buscador" placeholder="Buscar"/>
-        </li>
-        @foreach (var item in Model.ubicacion)
-	    {
-            <li data-pag="@item.pagina" data-left="@item.coordenada" >
-                <div class="barra"></div> 
-                <p class="menu"> @item.cadenas </p>
-            </li>		 
-	    }    
-    </ul>
-</nav>
-<div>
-    <hr />
-    Knockout
-    <iframe data-bind="attr: {src: srcKO}" width="60%" height="300"></iframe>
-    <br />        
-    <button data-bind="click: Change">Move Page </button>
+        <div class="col-sm-9">
+            <div class="row">
+                <h3>Nombre del archivo</h3>
+                <hr />
+                <div class="embed-responsive embed-responsive-4by3">
+                    <iframe class="embed-responsive-item" data-bind="attr: { src: srcKO }"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 
 @section Scripts{    
     <script src="~/Scripts/knockout-2.2.0.js"></script>
     <script>
 
-        var viewModel = {
+        var viewModel = {            
             uriKO: ko.observable("@Url.Action("getFile", new { type = "pdf" })"),
-            pageKO: ko.observable(1),
-            pdf_paramasKO: ko.observable("#toolbar=0&navpanes=0&view=FitH&page="),
-            Change: function () {                
-                this.pageKO(this.pageKO()+1);                
+            pageKO: ko.observable(5),
+            pdf_paramasKO: ko.observable("#view=fit&toolbar=0&navpanes=0&page="),
+            Change: function (t, e) {
+                var target;
+                if (e.currentTarget) target = e.currentTarget;               
+                this.pageKO($(target).data("pag"));                
             }
         };
-        viewModel.srcKO = ko.dependentObservable(function () {
+        viewModel.srcKO = ko.dependentObservable(function () {            
             return this.uriKO() + this.pdf_paramasKO() + this.pageKO();
         }, viewModel);
 

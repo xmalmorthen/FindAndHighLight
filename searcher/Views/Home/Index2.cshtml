@@ -6,20 +6,30 @@
 
 </style>
 
-<h2>Index2</h2>
-<div>
+
+<nav>
     <ul>
    @*     @foreach (var item in Model.text)
 	    {
             <li>@item</li>		 
 	    }        *@
+        <li>
+            <input type="text" id="buscador" placeholder="Buscar"/>
+        </li>
         @foreach (var item in Model.ubicacion)
 	    {
-            <li data-pag="@item.pagina" data-left="@item.coordenada" >@item.cadenas</li>		 
+            <li data-pag="@item.pagina" data-left="@item.coordenada" >
+                <div class="barra"></div> 
+                <p class="menu"> @item.cadenas </p>
+            </li>		 
 	    }    
     </ul>
-</div>
+</nav>
 <hr />
+
+
+
+
 @Model.coincidences
 <hr />
 <object data="data:application/pdf;base64,@Convert.ToBase64String(Model.file)"

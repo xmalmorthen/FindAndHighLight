@@ -15,7 +15,7 @@
                     </li>
                     @foreach (var item in Model.ubicacion)
                     {
-                        <li data-bind="click: Change" data-pag="@item.pagina" data-left="@item.coordenada" >
+                        <li data-bind="click: Change" id="btnMove" data-pag="@item.pagina" data-left="@item.coordenada" >
                             <div class="barra"></div>
                             <p class="menu">@item.cadenas </p>
                         </li>		 
@@ -29,7 +29,7 @@
                 <h3>Nombre del archivo</h3>
                 <hr />
                 <div class="embed-responsive embed-responsive-4by3">
-                    <iframe class="embed-responsive-item" data-bind="attr: { src: srcKO }"></iframe>
+                    <iframe id="vizor" class="embed-responsive-item" data-bind="attr: { src: src }"></iframe>
                 </div>
             </div>
         </div>
@@ -42,14 +42,23 @@
     <script src="~/Scripts/knockout-2.2.0.js"></script>
     <script>
 
-        var viewModel = {            
+        var viewModel = {
+          
+            src: ko.observable(""),
             uriKO: ko.observable("@Url.Action("getFile", new { type = "pdf" })"),
-            pageKO: ko.observable(5),
+            pageKO: ko.observable(3),
             pdf_paramasKO: ko.observable("#view=fit&toolbar=0&navpanes=0&page="),
             Change: function (t, e) {
+                $("#vizor").attr("src", "");
+                this.src("");
                 var target;
-                if (e.currentTarget) target = e.currentTarget;               
-                this.pageKO($(target).data("pag"));                
+                if (e.currentTarget) target = e.currentTarget;
+                this.pageKO($(target).data("pag"));
+                var self = this;
+                setTimeout(function () {
+                    self.src(self.srcKO());
+                }, 1);
+               
             }
         };
         viewModel.srcKO = ko.dependentObservable(function () {            
@@ -60,7 +69,9 @@
 
         $(document).ready(function () {
             $("#btnMove").on("click", function () {
-                //$("#emarf").attr("src", $("#myiframe").attr("src"));
+                //alert("f");
+                //$("embed").attr("src", "Home/getFile?type=pdf#view=fit&toolbar=0&navpanes=0&page=" + $(this).data("pag"));
+
             });
         });
     </script>

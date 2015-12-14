@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="bossTools">
+      <HintPath>..\devTools\devTools\bin\Debug\bossTools.dll</HintPath>
+    </Reference>
     <Reference Include="HiQPdf, Version=6.0.0.0, Culture=neutral, PublicKeyToken=acd8b62594985b24, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Utils\Libs\HiQ\HiQPdf.dll</HintPath>

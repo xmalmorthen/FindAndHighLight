@@ -21,7 +21,6 @@ namespace searcher.Controllers
                 Searcher s = new Searcher();
 
                 searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text);
-
                 if (System.IO.File.Exists(Server.MapPath("~/Files/bienestarResult.pdf")))
                     System.IO.File.Delete(Server.MapPath("~/Files/bienestarResult.pdf"));
                 System.IO.File.WriteAllBytes(Server.MapPath("~/Files/bienestarResult.pdf"), resp.file);
@@ -38,13 +37,8 @@ namespace searcher.Controllers
             if (!string.IsNullOrEmpty(frm["text"]))
             {
                 Searcher s = new Searcher();
-                //new FileStream("", FileMode.);
-                //return Json(s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text, new FileStream(Server.MapPath("~/Files/bienestar2.pdf"), FileMode.Create, FileAccess.Write, FileShare.None)), JsonRequestBehavior.AllowGet);            
-                //return File(s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text), "application/pdf");
 
                 searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), frm["text"]);
-                //byte[] file = resp.file;            
-                //ViewBag.base64EncodedPdf = Convert.ToBase64String(file);
                 if (System.IO.File.Exists(Server.MapPath("~/Files/bienestarResult.pdf")))
                     System.IO.File.Delete(Server.MapPath("~/Files/bienestarResult.pdf"));
                 System.IO.File.WriteAllBytes(Server.MapPath("~/Files/bienestarResult.pdf"), resp.file);
@@ -109,7 +103,9 @@ namespace searcher.Controllers
             return new JsonResult() { Data = true };
         }
 
-
-
+        public ActionResult find(string text)
+        {
+            return View();
+        }
     }
 }

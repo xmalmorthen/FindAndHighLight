@@ -19,12 +19,21 @@ namespace searcher.Utils.HTMLTOPDF
             public int coincidences { get; set; }
             public List<String> text { get; set; }
             public List<WordFine> ubicacion { get; set; }
+            public bool error { get; set; }
+            public string mensaje { get; set; }
+            
+            //Lista del patron
+            public List<bossTools.FileInfo> filesInfo { get; set; }
 
             public Respuesta()
             {
                 this.coincidences = 0;
                 this.text = new List<string>();
                 this.file = new byte[0];
+                this.filesInfo = new List<bossTools.FileInfo>();
+                this.ubicacion = new List<WordFine>();
+                this.error = false;
+                this.mensaje = string.Empty;
             }
         }
 
@@ -207,6 +216,34 @@ namespace searcher.Utils.HTMLTOPDF
                 pdftext.Append(PdfTextExtractor.GetTextFromPage(reader, i).Trim().TrimEnd().TrimStart());
             }
             return pdftext.ToString().Trim();
+        }
+
+        public Respuesta _find(string texto, string path, string pathOutput)
+        {
+            Respuesta response = new Respuesta();
+            if (String.IsNullOrEmpty(texto))
+            {
+                response.error = true;
+                response.mensaje = "Falta especificar el texto a buscar";
+                return response;
+            }
+
+            // validar si hay archivo cargado
+
+            try
+            {
+              bossTools.Documment bossToolsDoccument = new bossTools.Documment();
+              bossToolsDoccument.Search(path, texto.Trim(), pathOutput);
+                
+               return response;
+             
+            }
+            catch (Exception ex)
+            {
+                response.error = true;
+                response.mensaje = ex.Message;
+                return response;
+            }
         }
 
         public void Search(byte[] pdf)

@@ -1,9 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "searcher", "searcher\searcher.csproj", "{710BA86F-8281-4CC8-BA74-961E55CA95D4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bossTools", "devTools\devTools\bossTools.csproj", "{8087CB7F-A5E9-48EC-BD09-1F3A9991979A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bossTools", "devTools\bossTools.csproj", "{8087CB7F-A5E9-48EC-BD09-1F3A9991979A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +9,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{710BA86F-8281-4CC8-BA74-961E55CA95D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{710BA86F-8281-4CC8-BA74-961E55CA95D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{710BA86F-8281-4CC8-BA74-961E55CA95D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{710BA86F-8281-4CC8-BA74-961E55CA95D4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8087CB7F-A5E9-48EC-BD09-1F3A9991979A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8087CB7F-A5E9-48EC-BD09-1F3A9991979A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8087CB7F-A5E9-48EC-BD09-1F3A9991979A}.Release|Any CPU.ActiveCfg = Release|Any CPU

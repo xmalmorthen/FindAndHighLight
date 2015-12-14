@@ -20,7 +20,9 @@ namespace searcher.Controllers
             //return Json(s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text, new FileStream(Server.MapPath("~/Files/bienestar2.pdf"), FileMode.Create, FileAccess.Write, FileShare.None)), JsonRequestBehavior.AllowGet);            
             //return File(s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text), "application/pdf");
 
-            searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text);
+            //searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text);
+            searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s._find(text, Server.MapPath("~/Files/bienestar.pdf"), Server.MapPath("~/Files/temp"));
+
             //byte[] file = resp.file;            
             //ViewBag.base64EncodedPdf = Convert.ToBase64String(file);
             return View(resp);
@@ -34,6 +36,7 @@ namespace searcher.Controllers
             //return File(s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text), "application/pdf");
 
             searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), frm["text"]);
+            
             //byte[] file = resp.file;            
             //ViewBag.base64EncodedPdf = Convert.ToBase64String(file);
             return View(resp);
@@ -62,5 +65,9 @@ namespace searcher.Controllers
                 return new FileContentResult(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/doc.docx")), "application/octet-stream");
         }
 
+        public ActionResult find(string text)
+        {
+            return View();
+        }
     }
 }

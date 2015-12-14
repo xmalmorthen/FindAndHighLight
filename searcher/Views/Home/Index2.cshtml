@@ -22,7 +22,7 @@
                     @if(Model != null && Model.filesInfo.Count() > 0 ) {
                         foreach (var item in Model.filesInfo)
                         {
-                            <li><p> @item.FileName </p></li>
+                            <li><p> @item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last() </p></li>
                             <ul>
                                 @foreach(var i in item.MatchesList)
                                 {

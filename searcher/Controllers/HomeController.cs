@@ -83,13 +83,14 @@ namespace searcher.Controllers
             return View();
         }
 
-        public FileContentResult getFile(string type)
+        public FileContentResult getFile(string nameFile)
         {
+            string folder = string.Empty;
+            if (Session["carpeta"] != null)
+                folder = Session["carpeta"] as string;
 
-            if(type.Equals("pdf", StringComparison.InvariantCultureIgnoreCase))
-                return new FileContentResult(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestarResult.pdf")), "application/pdf");
-            else
-                return new FileContentResult(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/doc.docx")), "application/octet-stream");
+            string dirFinal = String.Format("{2}{0}/{1}/{3}", folder, "result", "~/Files/PDFFiles/", nameFile);
+            return new FileContentResult(System.IO.File.ReadAllBytes(Server.MapPath(dirFinal)), "application/pdf");                
         }
 
         [HttpGet]

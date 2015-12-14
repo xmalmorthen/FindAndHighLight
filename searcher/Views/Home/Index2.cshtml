@@ -19,13 +19,20 @@
                         }      
                     </li>
 
-                    @if(Model != null && Model.ubicacion != null && Model.ubicacion.Count > 0) {
-                        foreach (var item in Model.ubicacion)
+                    @if(Model != null && Model.filesInfo.Count() > 0 ) {
+                        foreach (var item in Model.filesInfo)
                         {
-                            <li data-bind="click: Change" id="btnMove" data-pag="@item.pagina" data-left="@item.coordenada" >
-                                <div class="barra"></div>
-                                <p class="menu">@item.cadenas </p>
-                            </li>		 
+                            <li><p> @item.FileName </p></li>
+                            <ul>
+                                @foreach(var i in item.MatchesList)
+                                {
+                                <li data-bind="click: Change" id="btnMove" data-pag="@i.Page"  >
+                                    <div class="barra"></div>
+                                    <p class="menu">@i.Page - @i.Line </p>
+                                </li>		 
+                                }
+                            </ul>
+                            
                         }
                     }else{
                         <li>                            

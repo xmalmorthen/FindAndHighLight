@@ -143,7 +143,7 @@ namespace searcher.Utils.HTMLTOPDF
             return pdftext.ToString().Trim();
         }
 
-        public Respuesta _find(string texto, string path, string pathOutput)
+        public Respuesta _find(string texto, List<string> lPath, string pathOutput)
         {
             Respuesta response = new Respuesta();
             if (String.IsNullOrEmpty(texto))
@@ -158,7 +158,7 @@ namespace searcher.Utils.HTMLTOPDF
             try
             {
               bossTools.Documment bossToolsDoccument = new bossTools.Documment();
-              bossToolsDoccument.Search(path, texto.Trim(), pathOutput);
+              response.filesInfo = bossToolsDoccument.Search(lPath, texto.Trim(), pathOutput);
                 
                return response;
              

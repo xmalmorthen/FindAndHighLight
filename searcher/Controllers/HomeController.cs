@@ -20,7 +20,7 @@ namespace searcher.Controllers
             if (!string.IsNullOrEmpty(text))
             {
                 Searcher s = new Searcher();
-
+                
                 searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text);
                 if (System.IO.File.Exists(Server.MapPath("~/Files/bienestarResult.pdf")))
                     System.IO.File.Delete(Server.MapPath("~/Files/bienestarResult.pdf"));
@@ -32,6 +32,7 @@ namespace searcher.Controllers
                 return View(new searcher.Utils.HTMLTOPDF.Searcher.Respuesta());
             }
         }
+        
         [HttpPost]
         public ActionResult Index2(FormCollection frm)
         {
@@ -41,14 +42,26 @@ namespace searcher.Controllers
                 if (Session["carpeta"] != null)
                     folder = Session["carpeta"] as string;
 
+                List<string> paths = new List<string>();
+                string dirFinal = String.Format("{2}{0}/{1}", folder, "result", "~/Files/PDFFiles/");
+                
                 Ftp ftp = Ftp.GetFTP();
-                ftp.ListFilesInDir(folder);
+                string ex = ftp.ExisteDirectorio(String.Format("{0}/{1}", folder, "result"));
+                List<string> pathsName = ftp.ListFilesInDir(folder);
                 Searcher s = new Searcher();
 
-                searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), frm["text"]);
-                if (System.IO.File.Exists(Server.MapPath("~/Files/bienestarResult.pdf")))
+                foreach (string p in pathsName)
+                {
+                    if (!p.Equals(String.Format("{0}/{1}", folder, "result") ))
+                    paths.Add(Server.MapPath(String.Format("{0}{1}", "~/Files/PDFFiles/", p )));
+                }
+
+                //searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), frm["text"]);
+                searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s._find(frm["text"], paths, Server.MapPath(dirFinal));
+                
+                /*if (System.IO.File.Exists(Server.MapPath("~/Files/bienestarResult.pdf")))
                     System.IO.File.Delete(Server.MapPath("~/Files/bienestarResult.pdf"));
-                System.IO.File.WriteAllBytes(Server.MapPath("~/Files/bienestarResult.pdf"), resp.file);
+                System.IO.File.WriteAllBytes(Server.MapPath("~/Files/bienestarResult.pdf"), resp.file);*/
                 ViewBag.text = frm["text"];
                 return View(resp);
             }

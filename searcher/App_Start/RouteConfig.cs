@@ -20,9 +20,15 @@ namespace searcher
             );
 
             routes.MapRoute(
+                "UploadFiles",
+                "UploadFiles",
+                new { controller = "Home", action = "filesToSearch" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "filesToSearch", id = UrlParameter.Optional }
             );
         }
     }

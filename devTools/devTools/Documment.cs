@@ -40,9 +40,10 @@ namespace bossTools
             _Search(new List<string>(new string[] { pathToFile }), stringToSearch, pathToSave);
         }
 
-        public void Search(List<string> pathToFile, string stringToSearch, string pathToSave)
+        public List<FileInfo> Search(List<string> pathToFile, string stringToSearch, string pathToSave)
         {
             _Search(pathToFile, stringToSearch, pathToSave);
+            return FileInfo;
         }
 
         private void _Search(List<string> pathToFile, string stringToSearch, string pathToSave = null)

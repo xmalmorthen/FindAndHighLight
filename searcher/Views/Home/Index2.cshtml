@@ -26,9 +26,9 @@
                             <ul>
                                 @foreach(var i in item.MatchesList)
                                 {
-                                <li data-bind="click: Change" id="btnMove" data-pag="@i.Page"  >
+                                <li data-bind="click: Change" id="btnMove" data-pag="@i.Page" data-filename="@item.FileNameOut.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" >
                                     <div class="barra"></div>
-                                    <p class="menu">@i.Page - @i.Line </p>
+                                    <p style="padding-left:25px;" class="menu">@i.Page - @i.Line </p>
                                 </li>		 
                                 }
                             </ul>
@@ -65,7 +65,9 @@
         var viewModel = {
           
             src: ko.observable(""),
-            uriKO: ko.observable("@Url.Action("getFile", new { type = "pdf" })"),
+            fileNameko: ko.observable(""),
+            paramsUriKO: ko.observable("?nameFile="),
+            uriKO: ko.observable("@Url.Action("getFile")"),
             pageKO: ko.observable(@String.Format("{0}", (Model != null && Model.ubicacion != null && Model.ubicacion.Count>0) ? Model.ubicacion.First().pagina : 0)),
             pdf_paramasKO: ko.observable('#toolbar=0&navpanes=0&zoom=80&page='),
             pdf_Rectangle: ko.observable("&highlight=200,400,100,200"),
@@ -78,6 +80,7 @@
                         $("#vizor").attr("src", "");
                         self.src("");
                         self.pageKO($(target).data("pag"));
+                        self.fileNameko($(target).data("filename"));
                         setTimeout(function () {
                             self.src(self.srcKO());
                         }, 1);
@@ -91,7 +94,7 @@
             }
         };
         viewModel.srcKO = ko.dependentObservable(function () {            
-            return this.uriKO() + this.pdf_paramasKO() + this.pageKO() + this.pdf_Rectangle();
+            return this.uriKO() + this.paramsUriKO() + this.fileNameko() + this.pdf_paramasKO() + this.pageKO() + this.pdf_Rectangle();
         }, viewModel);
 
         ko.applyBindings(viewModel);

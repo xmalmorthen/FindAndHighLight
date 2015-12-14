@@ -1,4 +1,5 @@
-﻿using searcher.Utils;
+﻿using searcher.Models;
+using searcher.Utils;
 using searcher.Utils.HTMLTOPDF;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,12 @@ namespace searcher.Controllers
         {
             if (!string.IsNullOrEmpty(frm["text"]))
             {
+                string folder = string.Empty;
+                if (Session["carpeta"] != null)
+                    folder = Session["carpeta"] as string;
+
+                Ftp ftp = Ftp.GetFTP();
+                ftp.ListFilesInDir(folder);
                 Searcher s = new Searcher();
 
                 searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), frm["text"]);
@@ -75,20 +82,29 @@ namespace searcher.Controllers
         [HttpGet]
         public ActionResult filesToSearch()
         {
-            if (Session["carpeta"] == null) Session["carpeta"] = Guid.NewGuid();
+            if (Session["carpeta"] == null)
+            {
+                string folderName = Guid.NewGuid().ToString();
+                Session["carpeta"] = folderName;
+            }
             return View();
         }
 
         [HttpPost]
         public JsonResult uploadFiles()
         {
-            HttpPostedFileBase item = Request.Files[0];
-            //foreach (HttpPostedFileBase item in files)
-            //{
+            //HttpPostedFileBase item = Request.Files[0];
+            var r = new List<files>();
+            int i = 0; 
+            foreach (string files in Request.Files)
+            {
+                var statuses = new List<files>();
+                var item = Request.Files[i];
+
                 if (item.ContentLength == 0)
                     return Json(new { Exito = false, Mensaje = "El archivo esta vacio" });
                 string extension = System.IO.Path.GetExtension(item.FileName).ToLower();
-                if (extension != ".pdf" || extension != ".doc" || extension != ".docx")
+                if (!(extension == ".pdf" || extension == ".doc" || extension == ".docx"))
                     return Json(new { Exito = false, Mensaje = "Sólo se aceptan archivos en formato PDF, DOCX Y DOC" });
                 
                 Ftp ftp = Ftp.GetFTP();
@@ -98,9 +114,22 @@ namespace searcher.Controllers
                     ftp.EliminarArchivo(ruta);
                 if (!ftp.UploadFTP(item.InputStream, ruta))
                     return Json(new { Exito = false, Mensaje = "Ocurrió un error al subir la evidencia" });
-                return Json(new { Exito = true });
-            //}
-            return new JsonResult() { Data = true };
+
+                statuses.Add(new files()
+                {
+                    name = item.FileName,
+                    size = item.ContentLength,
+                    type = item.ContentType,
+                    url = item.FileName,
+                    delete_url = item.FileName,
+                    //thumbnail_url = @"data:image/png;base64," + EncodeFile(file.FileName),
+                    delete_type = "GET",                    
+                });
+                JsonResult result = Json(statuses);
+                result.ContentType = "text/plain";
+                return result;                
+            }            
+            return Json(r);
         }
 
         public ActionResult find(string text)

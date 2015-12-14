@@ -39,9 +39,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="bossTools">
-      <HintPath>..\devTools\devTools\bin\Debug\bossTools.dll</HintPath>
-    </Reference>
     <Reference Include="HiQPdf, Version=6.0.0.0, Culture=neutral, PublicKeyToken=acd8b62594985b24, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Utils\Libs\HiQ\HiQPdf.dll</HintPath>
@@ -140,6 +137,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Files.cs" />
     <Compile Include="Models\WordFine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Ftp.cs" />
@@ -283,6 +281,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\devTools\devTools\bossTools.csproj">
+      <Project>{8087cb7f-a5e9-48ec-bd09-1f3a9991979a}</Project>
+      <Name>bossTools</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

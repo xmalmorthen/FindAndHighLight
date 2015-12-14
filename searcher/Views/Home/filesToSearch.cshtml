@@ -40,7 +40,7 @@
         <div class="row margin fileupload-buttonbar">
             <div class="col-sm-12 derecha">
                 <button type="submit" id="btnFormUpload" class="btn btn-primary start hide">Subir</button>
-                <button type="button" class="Firma btn btn-success">                    
+                <button type="button" class="btn-sendFiles btn btn-success">                    
                     <span>Enviar</span>
                 </button>
             </div>
@@ -66,6 +66,12 @@
                 </div>
             </div>            
         </td>
+    <td class="start hide">{% if (!o.options.autoUpload) { %}
+                <button class="btn btn-primary btnUpload">
+                    <i class="icon-upload icon-white"></i>
+                    <span></span>
+                </button>
+            {% } %}</td>
         {% } %}        
         <td class=" cancel">
         {% if (!i) { %}
@@ -98,9 +104,11 @@
             <td></td>
         {% } %}
         <td class="delete">
-            <button class="btn btn-primary" data-type="{%=file.delete_type%}" title="Eliminar" data-url="{%=file.delete_url%}">
-                <i class="fa fa-trash-o"></i>
-                
+            <button class="btn btn-danger" data-type="{%=file.delete_type%}" title="Eliminar" data-url="{%=file.delete_url%}">
+                <i class="fa fa-trash-o"></i>                
+            </button>
+            <button class="btn btn-default">
+                <i class="fa fa-search"></>
             </button>
         </td>
     </tr>         
@@ -108,7 +116,7 @@
 {% }                    
     if(j == 0){
         $("#IdConsecutivo").val(o.files[0].idconsecutivo);           
-        setTimeout("Firmar()", 1000);
+        setTimeout("Search()", 1000);
     }
     
     %}
@@ -128,7 +136,13 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-
+            $(".btn-sendFiles").on("click", function () {
+                $("#btnFormUpload").click();
+            });
         });
+
+        var Search = function () {
+            document.location.href = "/Searcher";
+        }
     </script>
 }

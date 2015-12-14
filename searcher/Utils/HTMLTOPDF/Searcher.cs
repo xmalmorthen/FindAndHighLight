@@ -80,29 +80,21 @@ namespace searcher.Utils.HTMLTOPDF
                     txt = new MyLocationTextExtractionStrategy(text);
                     var ex = PdfTextExtractor.GetTextFromPage(reader, i, txt);
 
-                    txt.strings.ForEach(item => { if (item.Contains(text)) { coincidences++; ; cadenas.Add(item);  } });                    
+                    txt.strings.ForEach(item => { if (item.ToLower().Contains(text.ToLower())) { coincidences++; ; cadenas.Add(item);  } });                    
                     //coincidences = txt.myPoints.Count();
                     foreach (var item in txt.myPoints)
                     {
                         WordFine itemWord = new WordFine();
-                        if (!item.Text.Contains(text))
+                        if (!item.Text.ToLower().Contains(text.ToLower()))
                             continue;
+
                         //Create a rectangle for the highlight. NOTE: Technically this isn't used but it helps with the quadpoint calculation
                         iTextSharp.text.Rectangle rect = new iTextSharp.text.Rectangle(item.Rect);
-                        //Create an array of quad points based on that rectangle. NOTE: The order below doesn't appear to match the actual spec but is what Acrobat produces
-                        //float[] quad = { rect.Left, rect.Bottom, rect.Right, rect.Bottom, rect.Left, rect.Top, rect.Right, rect.Top };
+                        //Create an array of quad points based on that rectangle. NOTE: The order below doesn't appear to match the actual spec but is what Acrobat produces                        
                         itemWord.pagina =i;
                         itemWord.cadenas = item.Text;
                         itemWord.coordenada = rect.Left;
-                        renglones.Add(itemWord);
-                        //Create our hightlight
-                        //PdfAnnotation highlight = PdfAnnotation.CreateMarkup(stamper.Writer, rect, null, PdfAnnotation.MARKUP_HIGHLIGHT, quad);
-
-                        //Set the color
-                        //highlight.Color = BaseColor.YELLOW;
-
-                        //Add the annotation
-                        //stamper.AddAnnotation(highlight, 1);                        
+                        renglones.Add(itemWord);                  
 
                         using (Document doc = new Document())
                         {
@@ -113,7 +105,7 @@ namespace searcher.Utils.HTMLTOPDF
                             PdfGState gs1 = new PdfGState();
                             gs1.FillOpacity = 0.3f;
                             over.SetGState(gs1);
-                            Rectanngulo rectangulo = findInLine(item.Text, text, rect);
+                            Rectanngulo rectangulo = findInLine(item.Text.ToLower(), text.ToLower(), rect);
                             //over.Rectangle(rect.Left, rect.Bottom, rect.Width, rect.Height);
                             over.Rectangle(rectangulo.left, rectangulo.bottom, rectangulo.width, rectangulo.height);
                             over.SetColorFill(BaseColor.YELLOW);
@@ -124,76 +116,9 @@ namespace searcher.Utils.HTMLTOPDF
                             over.RestoreState();                            
                             doc.Close();
                         }
-                    }
-
-                    string ex2 = PdfTextExtractor.GetTextFromPage(reader, i, st);
-                    //int coinci = ex2.
-
-                    //foreach (var item in st.TextLocationInfo)
-                    //{
-                    //    if (string.IsNullOrWhiteSpace(item.Text))
-                    //        continue;
-
-                    //    if (!item.Text.Contains(text))
-                    //        continue;
-
-                    //    coincidences++;
-                    //    cadenas.Add(item.Text);
-                    //    item.rectangle.Height = 10f;
-                    //    //item.rectangle.Width = 200f;
-                    //    iTextSharp.text.Rectangle rect = new iTextSharp.text.Rectangle(item.rectangle);
-
-                    //    using (Document doc = new Document())
-                    //    {
-                    //        PdfContentByte over = stamper.GetOverContent(i);
-
-                    //        over.SaveState();
-
-                    //        PdfGState gs1 = new PdfGState();
-                    //        gs1.FillOpacity = 0.3f;
-                    //        over.SetGState(gs1);
-
-                    //        over.Rectangle(rect.Left, rect.Bottom, rect.Width, rect.Height);
-                    //        over.SetColorFill(BaseColor.YELLOW);
-                    //        over.Fill();
-                    //        over.SetColorStroke(BaseColor.BLUE);
-                    //        over.Stroke();
-
-                    //        over.RestoreState();
-                    //        doc.Close();
-                    //    }
-                    //}
+                    }                
                 }
             }
-
-            //MemoryStream outPdfStream2 = new MemoryStream(outPdfStream.GetBuffer(), true);
-
-            //using (Document doc = new Document())
-            //{
-            //    PdfWriter writer = PdfWriter.GetInstance(doc, outPdfStream2);
-            //    doc.Open();
-            //    PdfContentByte over = writer.DirectContent;
-
-            //    over.SaveState();
-
-            //    over.Rectangle(10, 10, 50, 50);
-            //    over.SetColorFill(BaseColor.BLUE);
-            //    over.Fill();
-
-
-            //    PdfGState gs1 = new PdfGState();
-            //    gs1.FillOpacity = 0.5f;
-            //    over.SetGState(gs1);
-
-            //    over.Rectangle(0, 0, 60, 60);
-            //    over.SetColorFill(new BaseColor(255, 0, 0, 150));
-            //    over.Fill();
-
-            //    over.RestoreState();
-
-            //    doc.Close();
-            //}
-
             return new Respuesta() { coincidences = coincidences, file = outPdfStream.GetBuffer(), text = cadenas, ubicacion= renglones }; 
         }
 
@@ -280,7 +205,7 @@ namespace searcher.Utils.HTMLTOPDF
                     this.baselines.Add(this.lastBaseLine[Vector.I2]);
                     this.strings.Add(this.result.ToString());
 
-                    if (this.result.ToString().Contains(TextToSearchFor))
+                    if (this.result.ToString().ToLower().Contains(TextToSearchFor.ToLower()))
                     {
                         //Create a rectangle from it
                         var rect = new iTextSharp.text.Rectangle(startPositionWord[Vector.I1],

@@ -139,6 +139,7 @@
     </Compile>
     <Compile Include="Models\WordFine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Ftp.cs" />
     <Compile Include="Utils\HTMLTOPDF\ConvertHtmlToString.cs" />
     <Compile Include="Utils\HTMLTOPDF\Searcher.cs" />
     <Compile Include="Utils\HTMLTOPDF\TextExtractionStrategy.cs" />
@@ -148,6 +149,13 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\fonts\font-awesome\fontawesome-webfont.svg" />
+    <Content Include="Content\fonts\font-awesome\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\jquery.fileupload-ui.css" />
+    <Content Include="Content\jquery.fileupload.css" />
+    <Content Include="Content\search.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -209,15 +217,36 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\font-awesome\fontawesome-webfont.eot" />
+    <Content Include="Content\fonts\font-awesome\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\font-awesome\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\font-awesome\fontawesome-webfont.woff2" />
+    <Content Include="Content\fonts\font-awesome\FontAwesome.otf" />
+    <Content Include="Content\fonts\font-awesome\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\font-awesome\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\font-awesome\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\font-awesome\glyphicons-halflings-regular.woff2" />
+    <None Include="Properties\PublishProfiles\searcher.pubxml" />
+    <None Include="Properties\PublishProfiles\searcherfiles.pubxml" />
     <None Include="Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\FileUpload\canvas-to-blob.min.js" />
+    <Content Include="Scripts\FileUpload\jquery.fileupload-ip.js" />
+    <Content Include="Scripts\FileUpload\jquery.fileupload-ui.js" />
+    <Content Include="Scripts\FileUpload\jquery.fileupload.js" />
+    <Content Include="Scripts\FileUpload\jquery.iframe-transport.js" />
+    <Content Include="Scripts\FileUpload\load-image.min.js" />
+    <Content Include="Scripts\FileUpload\locale.js" />
+    <Content Include="Scripts\FileUpload\main.js" />
+    <Content Include="Scripts\FileUpload\tmpl.min.js" />
     <Content Include="Scripts\jquery-1.9.0.js" />
     <Content Include="Scripts\jquery-1.9.0.min.js" />
     <Content Include="Scripts\jquery-1.9.0.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
+    <Content Include="Scripts\jquery.ui.widget.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -227,7 +256,6 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\pdf.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Utils\Libs\HiQ\HiQPdf.dll" />
     <Content Include="Utils\Libs\HiQ\HiQPdf.xml" />
@@ -245,6 +273,7 @@
     <Content Include="Utils\Libs\HiQ\HiQPdf.dep" />
     <Content Include="Views\Home\Index2.cshtml" />
     <Content Include="Views\Home\viewer.cshtml" />
+    <Content Include="Views\Home\filesToSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

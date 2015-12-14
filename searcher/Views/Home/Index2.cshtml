@@ -1,24 +1,37 @@
 ﻿@model searcher.Utils.HTMLTOPDF.Searcher.Respuesta
 @{
-    ViewBag.Title = "Index2";
+    ViewBag.Title = "searcher v 0.0.1";
 }
 
 <div id="contenedor" class="container">
     <div class="row">
-        <div class="col-sm-3">
-            <nav class="row">
+        <div class="col-sm-3" style="    overflow-y: hidden;">
+            <nav class="row side-nav">
                 <ul>
                     <li>
                         @using(Html.BeginForm()){
-                            <input type="text" name="text" id="buscador" placeholder="Buscar" />
+                            <div class="input-group fecha_group">
+                                <input type="text" name="text" id="buscador" placeholder="Buscar" value="@ViewBag.text" />
+                                <span class="input-group-addon search">
+                                    @*<i class="fa fa-search"></i>*@<img src="~/Content/search.png" />
+                                </span>
+                            </div>                             
                         }      
                     </li>
-                    @foreach (var item in Model.ubicacion)
-                    {
-                        <li data-bind="click: Change" id="btnMove" data-pag="@item.pagina" data-left="@item.coordenada" >
-                            <div class="barra"></div>
-                            <p class="menu">@item.cadenas </p>
-                        </li>		 
+
+                    @if(Model != null && Model.ubicacion != null && Model.ubicacion.Count > 0) {
+                        foreach (var item in Model.ubicacion)
+                        {
+                            <li data-bind="click: Change" id="btnMove" data-pag="@item.pagina" data-left="@item.coordenada" >
+                                <div class="barra"></div>
+                                <p class="menu">@item.cadenas </p>
+                            </li>		 
+                        }
+                    }else{
+                        <li>                            
+                            <br />
+                            <p class="menu" style="text-align: center">No se encontraron resultados</p>
+                        </li>
                     }
                 </ul>
             </nav>
@@ -28,8 +41,8 @@
             <div class="row">
                 <h3>Nombre del archivo</h3>
                 <hr />
-                <div class="embed-responsive embed-responsive-4by3">
-                    <iframe id="vizor" class="embed-responsive-item" data-bind="attr: { src: src }"></iframe>
+                <div class="embed-responsive embed-responsive-4by3 side-nav-frame-p">
+                    <iframe id="vizor" class="embed-responsive-item side-nav-frame" data-bind="attr: { src: src }"></iframe>
                 </div>
             </div>
         </div>
@@ -46,23 +59,32 @@
           
             src: ko.observable(""),
             uriKO: ko.observable("@Url.Action("getFile", new { type = "pdf" })"),
-            pageKO: ko.observable(3),
-            pdf_paramasKO: ko.observable("#view=fit&toolbar=0&navpanes=0&page="),
+            pageKO: ko.observable(@String.Format("{0}", (Model != null && Model.ubicacion != null && Model.ubicacion.Count>0) ? Model.ubicacion.First().pagina : 0)),
+            pdf_paramasKO: ko.observable('#toolbar=0&navpanes=0&zoom=80&page='),
+            pdf_Rectangle: ko.observable("&highlight=200,400,100,200"),
             Change: function (t, e) {
-                $("#vizor").attr("src", "");
-                this.src("");
                 var target;
                 if (e.currentTarget) target = e.currentTarget;
-                this.pageKO($(target).data("pag"));
                 var self = this;
-                setTimeout(function () {
-                    self.src(self.srcKO());
-                }, 1);
-               
+                if (this.pageKO() != $(target).data("pag")) {                    
+                    $("#vizor").fadeOut("slow", function () {
+                        $("#vizor").attr("src", "");
+                        self.src("");
+                        self.pageKO($(target).data("pag"));
+                        setTimeout(function () {
+                            self.src(self.srcKO());
+                        }, 1);
+                        $("#vizor").fadeIn();
+                    });
+                } else{
+                    $("#vizor").fadeOut("slow", function () {
+                        $("#vizor").fadeIn();
+                    });
+                }
             }
         };
         viewModel.srcKO = ko.dependentObservable(function () {            
-            return this.uriKO() + this.pdf_paramasKO() + this.pageKO();
+            return this.uriKO() + this.pdf_paramasKO() + this.pageKO() + this.pdf_Rectangle();
         }, viewModel);
 
         ko.applyBindings(viewModel);
@@ -73,6 +95,21 @@
                 //$("embed").attr("src", "Home/getFile?type=pdf#view=fit&toolbar=0&navpanes=0&page=" + $(this).data("pag"));
 
             });
+
+            $(".search").on("click", function () {
+                $("form").submit();
+            });
+            inicio();
+            inicioFrame();
+            inicioPadding();
+            $(window).resize(function () {
+                inicio();
+                inicioFrame();
+                inicioPadding();
+            });
+
+            if (viewModel.pageKO()>0)
+                $("#vizor").attr("src", viewModel.srcKO());
         });
     </script>
 }

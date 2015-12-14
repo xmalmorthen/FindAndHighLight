@@ -12,5 +12,22 @@
 
     @Scripts.Render("~/bundles/jquery")
     @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        function inicio() {
+            var total = $(window).height();
+            $(".side-nav").css("min-height", total + "px");
+            $(".side-nav").css("max-height", total + "px");
+        }
+        function inicioFrame() {
+            var total = $(window).height() - 87;
+            $(".side-nav-frame").attr("style","max-height:"+ total + "px !important");
+        }
+
+        function inicioPadding() {
+            var total = $(window).height() - 87;
+            $(".side-nav-frame-p").css("padding-bottom", total + "px");
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,134 @@
+﻿@{
+    ViewBag.Title = "filesToSearch";
+}
+<style>
+    .bar {
+        height: 18px;
+        background: green;
+    }
+</style>
+<h2>filesToSearch</h2>
+
+@*<input id="fileupload" type="file" name="files[]" data-url="@Url.Action("uploadFiles", "Home")" multiple>
+<div id="progress">
+    <div class="bar" style="width: 0%;"></div>
+</div>*@
+<div class="container">
+    @using (Html.BeginForm("uploadFiles", "Home", FormMethod.Post, new { @role = "form", @id = "fileupload", @enctype = "multipart/form-data" }))
+    {  
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-2">
+                <label class="control-label">Anexar documento(s):</label>
+                <span class="btn btn-success radius-none fileinput-button">
+                    <span>Adjuntar archivo</span>
+                    <input type="file" name="files[]" multiple class="archivos" />
+                </span>
+                <div class="tableFiles">
+                    <table class="table table-striped">
+                        <thead class="thead">
+                            <tr>
+                                <th colspan="2">Nombre del archivo</th>
+                                <th colspan="1">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="files">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row margin fileupload-buttonbar">
+            <div class="col-sm-12 derecha">
+                <button type="submit" id="btnFormUpload" class="btn btn-primary start hide">Subir</button>
+                <button type="button" class="Firma btn btn-success">                    
+                    <span>Enviar</span>
+                </button>
+            </div>
+        </div>
+    }
+</div>
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">      
+        <td class="name"><div class="nameFile">
+            <span>{%=file.name%}</span>            
+        </td>       
+        {% if (file.error) { %}
+        <td class="error">
+            <span class="label label-important"></span>
+            {%=locale.fileupload.error%}: {%=locale.fileupload.errors[file.error] || file.error%}
+        </td>
+        {% } else if (o.files.valid && !i) { %}
+        <td>
+            <div class="progress progress-success progress-striped active">
+                <div class="bar" style="width:0%;">
+                </div>
+            </div>            
+        </td>
+        {% } %}        
+        <td class=" cancel">
+        {% if (!i) { %}
+            <button class="btn btn-danger" title="Eliminar">                
+                <i class="fa fa-trash-o"></i>
+                <span></span>
+            </button>
+        {% } %}</td>
+    </tr>    
+{% }  %}
+</script>
+<!--{%=file.thumbnail_url&&'gallery'%}-->
+<!-- The template to display files available for download 
+    <a href="{%=file.url%}" title="{%=file.name%}" rel="" download="{%=file.name%}">{%=file.name%}</a> Se quito porque no se debe descargar segun analisis
+    -->
+<script id="template-download" type="text/x-tmpl">
+{% var j = $(".template-upload").length;    
+    for (var i = 0, file; file=o.files[i]; i++) { %}
+    {% $("#IdConsecutivo").val(file.idconsecutivo); %}
+    <tr class="template-download fade">
+        {% if (file.error) { %}            
+            <td class="name"><div class="nameFile"><span>{%=file.name%}</span></div></td>           
+            <td class="error"><span class="label label-important"></span> {%=locale.fileupload.errors[file.error] || 'El archivo es muy grande' %}</td>
+
+        {% } else { %}
+            
+            <td class="name">                  
+                <span>{%=file.name%}</span>
+            </td>
+            <td></td>
+        {% } %}
+        <td class="delete">
+            <button class="btn btn-primary" data-type="{%=file.delete_type%}" title="Eliminar" data-url="{%=file.delete_url%}">
+                <i class="fa fa-trash-o"></i>
+                
+            </button>
+        </td>
+    </tr>         
+    {% j--; %}
+{% }                    
+    if(j == 0){
+        $("#IdConsecutivo").val(o.files[0].idconsecutivo);           
+        setTimeout("Firmar()", 1000);
+    }
+    
+    %}
+</script>
+
+@section Scripts{
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/FileUpload/tmpl.min.js"></script>
+    <script src="~/Scripts/FileUpload/canvas-to-blob.min.js"></script>
+    <script src="~/Scripts/FileUpload/load-image.min.js"></script>
+    <script src="~/Scripts/FileUpload/jquery.iframe-transport.js"></script>
+    <script src="~/Scripts/FileUpload/jquery.fileupload.js"></script>
+    <script src="~/Scripts/FileUpload/jquery.fileupload-ip.js"></script>
+    <script src="~/Scripts/FileUpload/jquery.fileupload-ui.js"></script>
+    <script src="~/Scripts/FileUpload/locale.js"></script>
+    <script src="~/Scripts/FileUpload/main.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>
+}

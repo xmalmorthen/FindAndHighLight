@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using searcher.Models;
+using NLog;
 
 namespace searcher.Utils.HTMLTOPDF
 {
@@ -143,30 +144,35 @@ namespace searcher.Utils.HTMLTOPDF
             return pdftext.ToString().Trim();
         }
 
+        Logger logger = LogManager.GetCurrentClassLogger();
         public Respuesta _find(string texto, List<string> lPath, string pathOutput)
         {
+            logger.Info("Find creating obj respuesta");
             Respuesta response = new Respuesta();
+            
             if (String.IsNullOrEmpty(texto))
             {
+                logger.Info("No se encontro texto a buscar");
                 response.error = true;
                 response.mensaje = "Falta especificar el texto a buscar";
                 return response;
             }
 
-            // validar si hay archivo cargado
-
             try
             {
-              bossTools.Documment bossToolsDoccument = new bossTools.Documment();
-              response.filesInfo = bossToolsDoccument.Search(lPath, texto.Trim(), pathOutput);
-                
-               return response;
-             
+                logger.Info("inicializadno boss tools");
+                bossTools.Documment bossToolsDoccument = new bossTools.Documment();
+                logger.Info("boss tools searching");
+                response.filesInfo = bossToolsDoccument.Search(lPath, texto.Trim(), pathOutput);
+
+                return response;
+
             }
             catch (Exception ex)
             {
+                logger.Error(ex);                
                 response.error = true;
-                response.mensaje = ex.Message;
+                response.mensaje = ex.InnerException + ex.Message + ex.Source + ex.TargetSite;                
                 return response;
             }
         }

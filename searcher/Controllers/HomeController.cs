@@ -1,4 +1,5 @@
-﻿using searcher.Models;
+﻿using NLog;
+using searcher.Models;
 using searcher.Utils;
 using searcher.Utils.HTMLTOPDF;
 using System;
@@ -12,11 +13,23 @@ namespace searcher.Controllers
 {
     public class HomeController : Controller
     {
+        Logger logger = LogManager.GetCurrentClassLogger();
         //
         // GET: /Home/
 
         public ActionResult Index2(string text)
         {
+            /*
+            logger.Trace("Sample trace message");
+            logger.Debug("Sample debug message");            
+            logger.Warn("Sample warning message");
+            logger.Error("Sample error message");
+            logger.Fatal("Sample fatal error message");
+            */
+
+            logger.Info("********************************************************************");
+            logger.Info("Inicio de la ejecución del proceso de búsqueda");
+
             if (!string.IsNullOrEmpty(text))
             {
                 Searcher s = new Searcher();
@@ -38,33 +51,41 @@ namespace searcher.Controllers
         {
             if (!string.IsNullOrEmpty(frm["text"]))
             {
+                logger.Info("Post de la búsqueda texto a buscar '{0}'", frm["text"]);
                 string folder = string.Empty;
                 if (Session["carpeta"] != null)
+                {
                     folder = Session["carpeta"] as string;
+                    logger.Info("ruta de localización de los archivos {0}", folder);
+                }
 
                 List<string> paths = new List<string>();
                 string dirFinal = String.Format("{2}{0}/{1}", folder, "result", "~/Files/PDFFiles/");
                 
                 Ftp ftp = Ftp.GetFTP();
+                logger.Info("FTP intanciado");
                 string ex = ftp.ExisteDirectorio(String.Format("{0}/{1}", folder, "result"));
+                logger.Info("ruta de localización de los archivos {0} creada en el ftp", folder);                
                 List<string> pathsName = ftp.ListFilesInDir(folder);
+                logger.Info("Extracción de archivos (t={0}) en el folder", paths.Count);
+                
                 Searcher s = new Searcher();
-
                 foreach (string p in pathsName)
                 {
                     if (!p.Equals(String.Format("{0}/{1}", folder, "result") ))
                     paths.Add(Server.MapPath(String.Format("{0}{1}", "~/Files/PDFFiles/", p )));
                 }
-
-                //searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), frm["text"]);
+                logger.Info("creación de las rutas de origen y destino de los archivos encontrados");
+                
                 searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s._find(frm["text"], paths, Server.MapPath(dirFinal));
                 
-                /*if (System.IO.File.Exists(Server.MapPath("~/Files/bienestarResult.pdf")))
-                    System.IO.File.Delete(Server.MapPath("~/Files/bienestarResult.pdf"));
-                System.IO.File.WriteAllBytes(Server.MapPath("~/Files/bienestarResult.pdf"), resp.file);*/
+                logger.Info("Fin de la ejecución del proceso de búsqueda");
+                logger.Info("********************************************************************");
+
                 ViewBag.text = frm["text"];
                 return View(resp);
             }
+            logger.Info("Post de la búsqueda texto a buscar vacío");
             ViewBag.text = frm["text"];
             return View(new searcher.Utils.HTMLTOPDF.Searcher.Respuesta());
         }

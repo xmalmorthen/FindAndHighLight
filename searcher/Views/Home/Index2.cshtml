@@ -1,6 +1,6 @@
 ﻿@model searcher.Utils.HTMLTOPDF.Searcher.Respuesta
 @{
-    ViewBag.Title = "searcher v 0.0.1";
+    ViewBag.Title = "searcher v 0.0.2";
 }
 
 <div id="contenedor" class="container">
@@ -26,7 +26,7 @@
                             <ul>
                                 @foreach(var i in item.MatchesList)
                                 {
-                                <li data-bind="click: Change" id="btnMove" data-pag="@i.Page" data-filename="@item.FileNameOut.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" >
+                                <li data-bind="click: Change" id="btnMove" data-pag="@i.Page" data-filenamedesc="@item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" data-filename="@item.FileNameOut.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" >
                                     <div class="barra"></div>
                                     <p style="padding-left:25px;" class="menu">@i.Page - @i.Line </p>
                                 </li>		 
@@ -46,9 +46,19 @@
 
         <div class="col-sm-9">
             <div class="row">
-                <h3>Nombre del archivo</h3>
+                @if (Model.error)
+                {
+                    <h3>@Model.mensaje</h3>
+                }else{
+                    if(Model != null && Model.filesInfo.Count() > 0 ) {
+                        <h3>@Model.filesInfo.First().FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()</h3>
+                    }
+                }
                 <hr />
                 <div class="embed-responsive embed-responsive-4by3 side-nav-frame-p">
+                    <div class="loading" style="margin: auto; padding-top: 5px; width: 80px;">
+                        <i class="fa fa-spinner fa-pulse fa-5x"></i>
+                    </div>                    
                     <iframe id="vizor" class="embed-responsive-item side-nav-frame" data-bind="attr: { src: src }"></iframe>
                 </div>
             </div>
@@ -72,10 +82,11 @@
             pdf_paramasKO: ko.observable('#toolbar=0&navpanes=0&zoom=80&page='),
             pdf_Rectangle: ko.observable("&highlight=200,400,100,200"),
             Change: function (t, e) {
+                $(".loading").fadeIn();
                 var target;
                 if (e.currentTarget) target = e.currentTarget;
                 var self = this;
-                if (this.pageKO() != $(target).data("pag")) {                    
+                if (this.pageKO() != $(target).data("pag") && this.fileNameko() != $(target).data("filename")) {
                     $("#vizor").fadeOut("slow", function () {
                         $("#vizor").attr("src", "");
                         self.src("");
@@ -84,8 +95,11 @@
                         setTimeout(function () {
                             self.src(self.srcKO());
                         }, 1);
-                        $("#vizor").fadeIn();
+                        $("#vizor").fadeIn(function () {
+                            $(".loading").fadeOut();
+                        });
                     });
+                    $("h3").text($(target).data("filenamedesc"));
                 } else{
                     $("#vizor").fadeOut("slow", function () {
                         $("#vizor").fadeIn();
@@ -105,7 +119,11 @@
             });
 
             $(".search").on("click", function () {
-                $("form").submit();
+                $("#vizor").fadeOut(function () {
+                    $(".loading").fadeIn(function () {
+                        $("form").submit();
+                    });                    
+                });                
             });
             inicio();
             inicioFrame();
@@ -118,6 +136,8 @@
 
             if (viewModel.pageKO()>0)
                 $("#vizor").attr("src", viewModel.srcKO());
+
+            $(".loading").fadeOut();
         });
     </script>
 }

@@ -19,6 +19,6 @@ $(function () {
     $('#fileupload').fileupload();
 
     $('#fileupload').fileupload('option', {
-        acceptFileTypes: /(\.|\/)(pdf)$/i
+        acceptFileTypes: /(\.|\/)(pdf|doc|docx)$/i
     });
 });

@@ -7,9 +7,7 @@
     <div class="row">
         <div class="col-sm-3" style="    overflow-y: hidden;">
             <nav class="row side-nav">
-                <ul>
-                    <li>
-                        @using(Html.BeginForm()){
+                  @using(Html.BeginForm()){
                             <div class="input-group fecha_group">
                                 <input type="text" name="text" id="buscador" placeholder="Buscar" value="@ViewBag.text" />
                                 <span class="input-group-addon search">
@@ -17,30 +15,32 @@
                                 </span>
                             </div>                             
                         }      
-                    </li>
-
+                <ol class="tree">
                     @if(Model != null && Model.filesInfo.Count() > 0 ) {
                         foreach (var item in Model.filesInfo)
                         {
-                            <li><p> @item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last() </p></li>
-                            <ul>
+                            <li><label for="Folder1"> @item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last() </label>
+                                <input id="folder1" type="checkbox" disabled="" checked="" />
+                            <ol>
                                 @foreach(var i in item.MatchesList)
                                 {
-                                <li data-bind="click: Change" id="btnMove" data-pag="@i.Page" data-filenamedesc="@item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" data-filename="@item.FileNameOut.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" >
+                                <li class="file" data-bind="click: Change" id="btnMove" data-pag="@i.Page" data-filenamedesc="@item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" data-filename="@item.FileNameOut.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" >
                                     <div class="barra"></div>
                                     <p style="padding-left:25px;" class="menu">@i.Page - @i.Line </p>
                                 </li>		 
                                 }
-                            </ul>
-                            
+                            </ol>
+                            </li>
                         }
                     }else{
+                       <ol>
                         <li>                            
                             <br />
                             <p class="menu" style="text-align: center">No se encontraron resultados</p>
                         </li>
+                       </ol>
                     }
-                </ul>
+                </ol>
             </nav>
         </div>
 

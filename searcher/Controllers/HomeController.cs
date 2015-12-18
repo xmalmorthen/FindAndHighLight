@@ -19,31 +19,11 @@ namespace searcher.Controllers
 
         public ActionResult Index2(string text)
         {
-            /*
-            logger.Trace("Sample trace message");
-            logger.Debug("Sample debug message");            
-            logger.Warn("Sample warning message");
-            logger.Error("Sample error message");
-            logger.Fatal("Sample fatal error message");
-            */
-
             logger.Info("********************************************************************");
             logger.Info("Inicio de la ejecución del proceso de búsqueda");
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                Searcher s = new Searcher();
-                
-                searcher.Utils.HTMLTOPDF.Searcher.Respuesta resp = s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text);
-                if (System.IO.File.Exists(Server.MapPath("~/Files/bienestarResult.pdf")))
-                    System.IO.File.Delete(Server.MapPath("~/Files/bienestarResult.pdf"));
-                System.IO.File.WriteAllBytes(Server.MapPath("~/Files/bienestarResult.pdf"), resp.file);
-                return View(resp);
-            }
-            else{
-                ViewBag.text = "";
-                return View(new searcher.Utils.HTMLTOPDF.Searcher.Respuesta());
-            }
+            
+            ViewBag.text = "";
+            return View(new searcher.Utils.HTMLTOPDF.Searcher.Respuesta());
         }
         
         [HttpPost]
@@ -88,22 +68,8 @@ namespace searcher.Controllers
             logger.Info("Post de la búsqueda texto a buscar vacío");
             ViewBag.text = frm["text"];
             return View(new searcher.Utils.HTMLTOPDF.Searcher.Respuesta());
-        }
-
-        public ActionResult Index3(string text)
-        {
-            Searcher s = new Searcher();
-            //new FileStream("", FileMode.);
-            //return Json(s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text, new FileStream(Server.MapPath("~/Files/bienestar2.pdf"), FileMode.Create, FileAccess.Write, FileShare.None)), JsonRequestBehavior.AllowGet);            
-            //return File(s.find(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/bienestar.pdf")), text), "application/pdf");
-            return View();
-        }
-
-        public ActionResult viewer(string text)
-        {
-            return View();
-        }
-
+        }        
+       
         public FileContentResult getFile(string nameFile)
         {
             string folder = string.Empty;
@@ -120,9 +86,16 @@ namespace searcher.Controllers
             if (Session["carpeta"] == null)
             {
                 string folderName = Guid.NewGuid().ToString();
-                Session["carpeta"] = folderName;
+                Session["carpeta"] = folderName;                
             }
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult resetFolder()
+        {
+            Session["carpeta"] = Guid.NewGuid().ToString();
+            return Json(true);
         }
 
         [HttpPost]
@@ -143,8 +116,8 @@ namespace searcher.Controllers
                     return Json(new { Exito = false, Mensaje = "Sólo se aceptan archivos en formato PDF, DOCX Y DOC" });
                 
                 Ftp ftp = Ftp.GetFTP();
-                ftp.ExisteDirectorio(Session["carpeta"] as string);
-                string ruta = string.Format("{0}/{1}", Session["carpeta"], item.FileName);
+                ftp.ExisteDirectorio(Session["carpeta"] as string);                
+                string ruta = string.Format("{0}/{1}-{2}", Session["carpeta"], item.FileName, Guid.NewGuid().ToString());
                 if (ftp.ExisteArchivo(ruta))
                     ftp.EliminarArchivo(ruta);
                 if (!ftp.UploadFTP(item.InputStream, ruta))
@@ -156,8 +129,7 @@ namespace searcher.Controllers
                     size = item.ContentLength,
                     type = item.ContentType,
                     url = item.FileName,
-                    delete_url = item.FileName,
-                    //thumbnail_url = @"data:image/png;base64," + EncodeFile(file.FileName),
+                    delete_url = item.FileName,                    
                     delete_type = "GET",                    
                 });
                 JsonResult result = Json(statuses);
@@ -165,11 +137,6 @@ namespace searcher.Controllers
                 return result;                
             }            
             return Json(r);
-        }
-
-        public ActionResult find(string text)
-        {
-            return View();
         }
     }
 }

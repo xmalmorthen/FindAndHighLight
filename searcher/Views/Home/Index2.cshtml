@@ -1,13 +1,27 @@
 ﻿@model searcher.Utils.HTMLTOPDF.Searcher.Respuesta
 @{
     ViewBag.Title = "searcher v 0.0.2";
+    int page = 0;
+    String nombre = String.Empty;
+    if(Model != null && Model.filesInfo != null && Model.filesInfo.Count > 0)
+    {
+        foreach (var item in Model.filesInfo)
+	    {
+            foreach (var match in item.MatchesList)
+	        {
+                page = match.Page;
+                nombre = item.FileNameOut.Split(new string[] { @"\" }, StringSplitOptions.RemoveEmptyEntries).Last();
+                break;
+	        }		
+        } 	            
+    }
 }
 
 <div id="contenedor" class="container">
     <div class="row">
         <div class="col-sm-3" style="    overflow-y: hidden;">
-            <nav class="row side-nav">
-                  @using(Html.BeginForm()){
+            <br />
+                     @using(Html.BeginForm()){
                             <div class="input-group fecha_group">
                                 <input type="text" name="text" id="buscador" placeholder="Buscar" value="@ViewBag.text" />
                                 <span class="input-group-addon search">
@@ -19,14 +33,14 @@
                     @if(Model != null && Model.filesInfo.Count() > 0 ) {
                         foreach (var item in Model.filesInfo)
                         {
-                            <li><label for="Folder1"> @item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last().Split(new string[]{ @"¬" }, StringSplitOptions.RemoveEmptyEntries).Last() </label>
-                                <input id="folder1" type="checkbox" disabled="" checked="" />
+                            <li>                                       
+                                <label class="name" for="Folder1"> @item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last().Split(new string[]{ @"¬" }, StringSplitOptions.RemoveEmptyEntries).Last() </label>                                                                 
+                                <input type="checkbox" />                                                                                       
                             <ol>
                                 @foreach(var i in item.MatchesList)
                                 {
-                                <li class="file" data-bind="click: Change" id="btnMove" data-pag="@i.Page" data-filenamedesc="@item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last().Split(new string[]{ @"¬" }, StringSplitOptions.RemoveEmptyEntries).Last()" data-filename="@item.FileNameOut.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" >
-                                    <div class="barra"></div>
-                                    <p style="padding-left:25px;" class="menu">@i.Page - @i.Line </p>
+                                <li class="file" data-bind="click: Change" data-pag="@i.Page" data-filenamedesc="@item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last().Split(new string[]{ @"¬" }, StringSplitOptions.RemoveEmptyEntries).Last()" data-filename="@item.FileNameOut.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" >
+                                    <a>Página: @i.Page - Línea: @i.Line </a>
                                 </li>		 
                                 }
                             </ol>
@@ -41,7 +55,6 @@
                        </ol>
                     }
                 </ol>
-            </nav>
         </div>
 
         <div class="col-sm-9">
@@ -77,9 +90,9 @@
             src: ko.observable(""),
             realFileNameKO: ko.observable(""),
             fileNameko: ko.observable(""),
-            paramsUriKO: ko.observable('?nameFile=@String.Format("{0}", (Model != null && Model.filesInfo != null && Model.filesInfo.Count>0) ? Model.filesInfo.First().FileNameOut.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last() : "")'),
+            paramsUriKO: ko.observable('?nameFile=@nombre'),
             uriKO: ko.observable("@Url.Action("getFile")"),
-            pageKO: ko.observable(@String.Format("{0}", (Model != null && Model.filesInfo != null && Model.filesInfo.Count>0) ? Model.filesInfo.First().MatchesList.First().Page : 0)),
+            pageKO: ko.observable(@page),
             pdf_paramasKO: ko.observable('#toolbar=0&navpanes=0&zoom=80&page='),
             pdf_Rectangle: ko.observable("&highlight=200,400,100,200"),
             Change: function (t, e) {                
@@ -117,9 +130,6 @@
         ko.applyBindings(viewModel);
 
         $(document).ready(function () {
-            $("#btnMove").on("click", function () {
-
-            });
 
             $(".search").on("click", function () {
                 $("#vizor").fadeOut(function () {

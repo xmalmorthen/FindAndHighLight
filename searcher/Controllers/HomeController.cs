@@ -117,7 +117,7 @@ namespace searcher.Controllers
                 
                 Ftp ftp = Ftp.GetFTP();
                 ftp.ExisteDirectorio(Session["carpeta"] as string);                
-                string ruta = string.Format("{0}/{1}-{2}", Session["carpeta"], item.FileName, Guid.NewGuid().ToString());
+                string ruta = string.Format("{0}/{2}¬{1}", Session["carpeta"], item.FileName, Guid.NewGuid().ToString());
                 if (ftp.ExisteArchivo(ruta))
                     ftp.EliminarArchivo(ruta);
                 if (!ftp.UploadFTP(item.InputStream, ruta))

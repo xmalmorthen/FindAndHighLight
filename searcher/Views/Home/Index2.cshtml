@@ -19,12 +19,12 @@
                     @if(Model != null && Model.filesInfo.Count() > 0 ) {
                         foreach (var item in Model.filesInfo)
                         {
-                            <li><label for="Folder1"> @item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last() </label>
+                            <li><label for="Folder1"> @item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last().Split(new string[]{ @"¬" }, StringSplitOptions.RemoveEmptyEntries).Last() </label>
                                 <input id="folder1" type="checkbox" disabled="" checked="" />
                             <ol>
                                 @foreach(var i in item.MatchesList)
                                 {
-                                <li class="file" data-bind="click: Change" id="btnMove" data-pag="@i.Page" data-filenamedesc="@item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" data-filename="@item.FileNameOut.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" >
+                                <li class="file" data-bind="click: Change" id="btnMove" data-pag="@i.Page" data-filenamedesc="@item.FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last().Split(new string[]{ @"¬" }, StringSplitOptions.RemoveEmptyEntries).Last()" data-filename="@item.FileNameOut.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()" >
                                     <div class="barra"></div>
                                     <p style="padding-left:25px;" class="menu">@i.Page - @i.Line </p>
                                 </li>		 
@@ -51,7 +51,7 @@
                     <h3>@Model.mensaje</h3>
                 }else{
                     if(Model != null && Model.filesInfo.Count() > 0 ) {
-                        <h3>@Model.filesInfo.First().FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last()</h3>
+                        <h3>@Model.filesInfo.First().FileName.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last().Split(new string[]{ @"¬" }, StringSplitOptions.RemoveEmptyEntries).Last()</h3>
                     }
                 }
                 <hr />
@@ -75,20 +75,23 @@
         var viewModel = {
           
             src: ko.observable(""),
+            realFileNameKO: ko.observable(""),
             fileNameko: ko.observable(""),
-            paramsUriKO: ko.observable("?nameFile="),
+            paramsUriKO: ko.observable('?nameFile=@String.Format("{0}", (Model != null && Model.filesInfo != null && Model.filesInfo.Count>0) ? Model.filesInfo.First().FileNameOut.Split(new string[]{ @"\" }, StringSplitOptions.RemoveEmptyEntries).Last() : "")'),
             uriKO: ko.observable("@Url.Action("getFile")"),
             pageKO: ko.observable(@String.Format("{0}", (Model != null && Model.filesInfo != null && Model.filesInfo.Count>0) ? Model.filesInfo.First().MatchesList.First().Page : 0)),
             pdf_paramasKO: ko.observable('#toolbar=0&navpanes=0&zoom=80&page='),
             pdf_Rectangle: ko.observable("&highlight=200,400,100,200"),
-            Change: function (t, e) {
+            Change: function (t, e) {                
                 $(".loading").fadeIn();
                 var target;
                 if (e.currentTarget) target = e.currentTarget;
+                
                 var self = this;
-                if (this.pageKO() != $(target).data("pag") && this.fileNameko() != $(target).data("filename")) {
+                //if (this.pageKO() != $(target).data("pag") && this.fileNameko() != $(target).data("filename")) {
                     $("#vizor").fadeOut("slow", function () {
                         $("#vizor").attr("src", "");
+                        self.paramsUriKO("?nameFile=");
                         self.src("");
                         self.pageKO($(target).data("pag"));
                         self.fileNameko($(target).data("filename"));
@@ -100,11 +103,11 @@
                         });
                     });
                     $("h3").text($(target).data("filenamedesc"));
-                } else{
-                    $("#vizor").fadeOut("slow", function () {
-                        $("#vizor").fadeIn();
-                    });
-                }
+                //} else{
+                  //  $("#vizor").fadeOut("slow", function () {
+                    //    $("#vizor").fadeIn();
+                    //});
+                //}
             }
         };
         viewModel.srcKO = ko.dependentObservable(function () {            

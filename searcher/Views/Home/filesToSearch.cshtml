@@ -15,6 +15,14 @@
             <div class="col-sm-10 col-sm-offset-1">
                 <h2>Upload files</h2>
                 <hr />
+                <div class="pull-right">                                        
+                    <span>¿Desea eliminar archivos anteriores?</span>
+                    <button id="btnClear" type="button" class="btn btn-success">
+                        <span>Limpiar</span>
+                    </button>                    
+                </div>
+                <div style="clear: both;"></div>
+                <hr />
                 <br />
                 <label class="control-label">Anexar documento(s):</label>
                 <span class="btn btn-success radius-none fileinput-button">
@@ -130,11 +138,16 @@
     <script src="~/Scripts/FileUpload/jquery.fileupload-ui.js"></script>
     <script src="~/Scripts/FileUpload/locale.js"></script>
     <script src="~/Scripts/FileUpload/main.js"></script>
-
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/general.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $(".btn-sendFiles").on("click", function () {
                 $("#btnFormUpload").click();
+            });
+            $("#btnClear").on("click", function () {
+                ConfirmCustom("¿Esta seguró de eliminar los archivos anteriores?", Reset, "", "Aceptar", "Cancelar");
             });
         });
 
@@ -142,5 +155,18 @@
             $(".btn-sendFiles").addClass("disabled");
             $(".btn-searchFiles").removeClass("disabled");
         }
+        var Reset = function () {
+            $.ajax({
+                url: "@Url.Action("resetFolder")",
+                type: "POST",
+                datatype: "json",
+                success: function (response) {
+                    ExitoCustom();
+                },
+                error: function (response) {
+                    ErrorCustom();
+                }
+            });
+        }        
     </script>
 }

@@ -78,7 +78,7 @@
             fileNameko: ko.observable(""),
             paramsUriKO: ko.observable("?nameFile="),
             uriKO: ko.observable("@Url.Action("getFile")"),
-            pageKO: ko.observable(@String.Format("{0}", (Model != null && Model.ubicacion != null && Model.ubicacion.Count>0) ? Model.ubicacion.First().pagina : 0)),
+            pageKO: ko.observable(@String.Format("{0}", (Model != null && Model.filesInfo != null && Model.filesInfo.Count>0) ? Model.filesInfo.First().MatchesList.First().Page : 0)),
             pdf_paramasKO: ko.observable('#toolbar=0&navpanes=0&zoom=80&page='),
             pdf_Rectangle: ko.observable("&highlight=200,400,100,200"),
             Change: function (t, e) {

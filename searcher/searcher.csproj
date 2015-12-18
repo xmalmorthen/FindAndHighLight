@@ -235,6 +235,7 @@
     <None Include="Properties\PublishProfiles\searcher.pubxml" />
     <None Include="Properties\PublishProfiles\searcherfiles.pubxml" />
     <None Include="Scripts\jquery-1.9.0.intellisense.js" />
+    <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\FileUpload\canvas-to-blob.min.js" />
@@ -246,6 +247,7 @@
     <Content Include="Scripts\FileUpload\locale.js" />
     <Content Include="Scripts\FileUpload\main.js" />
     <Content Include="Scripts\FileUpload\tmpl.min.js" />
+    <Content Include="Scripts\general.js" />
     <Content Include="Scripts\jquery-1.9.0.js" />
     <Content Include="Scripts\jquery-1.9.0.min.js" />
     <Content Include="Scripts\jquery-1.9.0.min.map" />
@@ -278,11 +280,11 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Utils\Libs\HiQ\HiQPdf.dep" />
     <Content Include="Views\Home\Index2.cshtml" />
-    <Content Include="Views\Home\viewer.cshtml" />
     <Content Include="Views\Home\filesToSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Files\dllLogs\" />
     <Folder Include="Files\Logs\" />
   </ItemGroup>
   <ItemGroup>

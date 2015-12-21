@@ -94,3 +94,46 @@ C:\Users\dell\Documents\Visual Studio 2012\Projects\FindAndHighLight\searcher\ob
 C:\Users\dell\Documents\Visual Studio 2012\Projects\FindAndHighLight\searcher\obj\Debug\searcher.pdb
 C:\Users\dell\Documents\Visual Studio 2012\Projects\FindAndHighLight\searcher\bin\bossTools.dll
 C:\Users\dell\Documents\Visual Studio 2012\Projects\FindAndHighLight\searcher\bin\bossTools.pdb
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\NLog.config
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\searcher.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\searcher.pdb
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\Antlr3.Runtime.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\bossTools.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\EntityFramework.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\HiQPdf.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\itextsharp.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\Microsoft.Web.Infrastructure.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\Newtonsoft.Json.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\NLog.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\System.Web.Mvc.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\System.Web.Optimization.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\System.Web.Providers.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\System.Web.Razor.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\System.Web.WebPages.Deployment.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\System.Web.WebPages.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\System.Web.WebPages.Razor.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\WebGrease.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\bossTools.pdb
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\HiQPdf.xml
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\itextsharp.xml
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\NLog.xml
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\EntityFramework.xml
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\Newtonsoft.Json.xml
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\System.Web.Mvc.xml
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\System.Web.Razor.xml
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\System.Web.WebPages.xml
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\System.Web.WebPages.Deployment.xml
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\System.Web.WebPages.Razor.xml
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\es\EntityFramework.resources.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\es\System.Web.Mvc.resources.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\es\System.Web.Optimization.resources.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\es\System.Web.Providers.resources.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\es\System.Web.Razor.resources.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\es\System.Web.WebPages.resources.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\es\System.Web.WebPages.Deployment.resources.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\es\System.Web.WebPages.Razor.resources.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\bin\HiQPdf.dep
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\obj\Debug\searcher.csprojResolveAssemblyReference.cache
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\obj\Debug\searcher.dll
+D:\Proyectos\visual_studio\c#\FindAndHighLight\searcher\obj\Debug\searcher.pdb

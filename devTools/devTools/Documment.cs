@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using Word = Microsoft.Office.Interop.Word;
 
@@ -6,6 +7,7 @@ namespace bossTools
 {
     public class Documment
     {
+        Logger logger = LogManager.GetCurrentClassLogger();
         protected Word.Application word;
         protected Word.Document doc;
 
@@ -47,7 +49,9 @@ namespace bossTools
 
         private void _Search(List<string> pathToFile, string stringToSearch, string pathToSave = null)
         {
+            logger.Info("Clean the return List of coincidences");
             FileInfo.Clear();
+            logger.Info("initializing paramenter objects");
 
             object oMissing = System.Reflection.Missing.Value;
             object oTrue = true;
@@ -55,20 +59,25 @@ namespace bossTools
 
             try
             {
+                logger.Info("instantiating word app");
                 word = new Word.Application();
+                logger.Info("instantiating document of word app");
                 doc = new Word.Document();
 
+                logger.Info("reading each files on path ={0}", pathToFile);
                 foreach (string item in pathToFile)
                 {
                     object fileName = item;
-
+                    logger.Info("opening the file");
                     doc = word.Documents.Open(ref fileName, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oFalse, ref oMissing, ref oMissing, ref oMissing, ref oMissing);
                     doc.Activate();
+                    logger.Info("file opened and activates");
 
                     FileInfo fiIn = new FileInfo();
                     fiIn.FileName = item;
                     fiIn.FileNameOut = string.Format(@"{0}\{1}.pdf", pathToSave, Guid.NewGuid().ToString());
-
+                    
+                    logger.Info("searching the text on each paragraphs");
                     foreach (Word.Paragraph Paragraph in doc.Paragraphs)
                     {
                         Word.Range rng = Paragraph.Range;
@@ -94,6 +103,7 @@ namespace bossTools
                             maIn.Line = (int)rng.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdFirstCharacterLineNumber);
 
                             fiIn.MatchesList.Add(maIn);
+                            logger.Info("text matching and highlight");
 
                             rng.Find.Execute(
                                         ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing,
@@ -106,11 +116,13 @@ namespace bossTools
 
                     if (!string.IsNullOrEmpty(pathToSave))
                     {
+                        logger.Info("exporting the file");
                         doc.ExportAsFixedFormat(
                                 fiIn.FileNameOut,
                                 Word.WdExportFormat.wdExportFormatPDF,
                                 OptimizeFor: Word.WdExportOptimizeFor.wdExportOptimizeForOnScreen,
                                 BitmapMissingFonts: true, DocStructureTags: false);
+                        logger.Info("file exported");
                     }
 
                     object saveOption = Word.WdSaveOptions.wdDoNotSaveChanges;
@@ -122,6 +134,9 @@ namespace bossTools
             catch (Exception ex)
             {
                 //TODO: Manipular errores;
+                logger.Info("An exception has detected");
+                logger.Error(ex);
+                throw new Exception("");
                 throw;
             }
             finally
